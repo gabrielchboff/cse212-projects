@@ -1,6 +1,17 @@
 ﻿using System.Diagnostics;
 
 public static class Algorithms {
+    
+    /*
+     * n - The size of the data given to the methods in this test
+       alg1-count - The number of loop iterations (i.e. work) done by Algorithm1
+       alg2-count - The number of loop iterations (i.e. work) done by Algorithm2
+       alg3-count - The number of loop iterations (i.e. work) done by Algorithm3
+       alg1-time - The time in milliseconds it took to complete Algorithm1
+       alg2-time - The time in milliseconds it took to complete Algorithm2
+       alg3-time - The time in milliseconds it took to complete algorithm3
+     */
+    
     public static void Run() {
         Console.WriteLine("{0,15}{1,15}{2,15}{3,15}{4,15}{5,15}{6,15}", "n", "alg1-count", "alg2-count", "alg3-count",
             "alg1-time", "alg2-time", "alg3-time");
@@ -27,6 +38,7 @@ public static class Algorithms {
 
         sw.Stop();
         return sw.Elapsed.TotalMilliseconds / times;
+        // O(n)
     }
 
     /// <summary>
@@ -41,6 +53,7 @@ public static class Algorithms {
             count += 1;
 
         return count;
+        // O(n)
     }
 
     /// <summary>
@@ -56,6 +69,7 @@ public static class Algorithms {
             count += 1;
 
         return count;
+        // O(n^2)
     }
 
     /// <summary>
@@ -75,5 +89,6 @@ public static class Algorithms {
         }
 
         return count;
+        // O(log n)
     }
 }

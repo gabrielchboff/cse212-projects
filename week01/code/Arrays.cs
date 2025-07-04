@@ -8,12 +8,37 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // The result will be a list of doubles that contains the multiples
+        var result = new List<double>();
 
-        return []; // replace this return statement with your own
+        // Check if the length is negative
+        if (length <= 0)
+        {
+            // Generate an negative length list to properly generate the multiples according to the index
+            for (int i = 0; i > length; i--)
+            {
+                // Add the number to the result
+                result.Add(number * (i - 1));
+            }
+        }
+        // Check if the length is 0
+        else if (length == 0)
+        {
+            // Add the number to the result
+            result.Add(number);
+        }
+        else if (length > 0)
+        {
+            // Loop to generate the multiples according to the length parameter if it is greater than 0
+            for (int i = 0; i < length; i++)
+            {
+                // Add the number to the result
+                result.Add(number * (i + 1));
+            }    
+        }
+
+        // Return the result
+        return result.ToArray();
     }
 
     /// <summary>
@@ -25,9 +50,24 @@ public static class Arrays
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Get the number of items in the list
+        int count = data.Count;
+
+        // Calculate the effective rotation amount using modulo
+        // This handles cases where amount is greater than the list size
+        int effectiveAmount = amount % count;
+
+        // Get the two parts of the list using GetRange
+        // First part: last 'effectiveAmount' elements
+        // Second part: remaining elements from the start
+        List<int> lastPart = data.GetRange(count - effectiveAmount, effectiveAmount);
+        List<int> firstPart = data.GetRange(0, count - effectiveAmount);
+
+        // Clear the original list and add the parts in reverse order
+        data.Clear();
+        
+        // Add the parts in reverse order to the original list
+        data.AddRange(lastPart);
+        data.AddRange(firstPart);
     }
 }

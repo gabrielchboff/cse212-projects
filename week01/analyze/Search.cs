@@ -24,6 +24,7 @@ public static class Search {
 
         sw.Stop();
         return sw.Elapsed.TotalMilliseconds / times;
+       // O(n) 
     }
 
     /// <summary>
@@ -41,6 +42,7 @@ public static class Search {
         }
 
         return count; // Didn't find it
+        //O(n)
     }
 
     /// <summary>
@@ -61,5 +63,6 @@ public static class Search {
             return 1 + SearchSorted2(data, target, middle + 1, end);
         // Search in the lower half before index middle
         return 1 + SearchSorted2(data, target, start, middle - 1);
+        //O(log n)
     }
 }
