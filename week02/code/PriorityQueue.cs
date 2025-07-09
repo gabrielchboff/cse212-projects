@@ -1,4 +1,8 @@
-﻿public class PriorityQueue
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class PriorityQueue
 {
     private List<PriorityItem> _queue = new();
 
@@ -15,32 +19,50 @@
         _queue.Add(newNode);
     }
 
+    /// <summary>
+    /// Removes the item with the highest priority from the queue and returns its value.
+    /// If there's a tie in priority, the item that was enqueued first is removed.
+    /// </summary>
+    /// <returns>The value of the highest-priority item.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the queue is empty.</exception>
     public string Dequeue()
     {
-        if (_queue.Count == 0) // Verify the queue is not empty
+        // Verify the queue is not empty
+        if (_queue.Count == 0) 
         {
             throw new InvalidOperationException("The queue is empty.");
         }
 
-        // Find the index of the item with the highest priority to remove
+        // Find the index of the item with the highest priority
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
+        for (int index = 1; index < _queue.Count; index++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            // Use '>' to ensure that in a tie, the item closer to the front is kept.
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
+            {
                 highPriorityIndex = index;
+            }
         }
 
-        // Remove and return the item with the highest priority
+        // Retrieve the value and then remove the item from the queue
         var value = _queue[highPriorityIndex].Value;
+        _queue.RemoveAt(highPriorityIndex);
+
         return value;
     }
 
+    /// <summary>
+    /// Provides a string representation of the queue's contents.
+    /// </summary>
     public override string ToString()
     {
         return $"[{string.Join(", ", _queue)}]";
     }
 }
 
+/// <summary>
+/// Represents a single item in the priority queue, containing a value and a priority.
+/// </summary>
 internal class PriorityItem
 {
     internal string Value { get; set; }

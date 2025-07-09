@@ -1,23 +1,23 @@
+using System;
+using System.Collections.Generic; // Required for Queue<T>
+using System.Linq; // Used for the updated ToString method
+
 /// <summary>
-/// This queue is circular.  When people are added via AddPerson, then they are added to the 
+/// This queue is circular.  When people are added via AddPerson, then they are added to the
 /// back of the queue (per FIFO rules).  When GetNextPerson is called, the next person
-/// in the queue is saved to be returned and then they are placed back into the back of the queue.  Thus,
-/// each person stays in the queue and is given turns.  When a person is added to the queue, 
-/// a turns parameter is provided to identify how many turns they will be given.  If the turns is 0 or
-/// less than they will stay in the queue forever.  If a person is out of turns then they will 
-/// not be added back into the queue.
+/// in the queue is saved to be returned and then they are placed back into the back of the queue.
 /// </summary>
 public class TakingTurnsQueue
 {
-    private readonly PersonQueue _people = new();
+    // Use the standard System.Collections.Generic.Queue<Person>
+    private readonly Queue<Person> _people = new();
 
-    public int Length => _people.Length;
+    // The standard Queue<T> uses 'Count' instead of 'Length'
+    public int Length => _people.Count;
 
     /// <summary>
-    /// Add new people to the queue with a name and number of turns
+    /// Add new people to the queue with a name and number of turns.
     /// </summary>
-    /// <param name="name">Name of the person</param>
-    /// <param name="turns">Number of turns remaining</param>
     public void AddPerson(string name, int turns)
     {
         var person = new Person(name, turns);
@@ -26,32 +26,48 @@ public class TakingTurnsQueue
 
     /// <summary>
     /// Get the next person in the queue and return them. The person should
-    /// go to the back of the queue again unless the turns variable shows that they 
-    /// have no more turns left.  Note that a turns value of 0 or less means the 
-    /// person has an infinite number of turns.  An error exception is thrown 
-    /// if the queue is empty.
+    /// go to the back of the queue again unless they have no more turns left.
     /// </summary>
     public Person GetNextPerson()
     {
-        if (_people.IsEmpty())
+        // Check the Count property to see if the queue is empty
+        if (_people.Count == 0)
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-        else
+
+        // Dequeue the person from the front of the queue.
+        Person person = _people.Dequeue();
+
+        // Check for infinite turns (turns <= 0).
+        if (person.Turns <= 0)
         {
-            Person person = _people.Dequeue();
-            if (person.Turns > 1)
+            // Re-enqueue the person for their next turn.
+            _people.Enqueue(person);
+        }
+        else // The person has a finite number of turns.
+        {
+            // Decrease their turn count.
+            person.Turns--;
+
+            // If they still have turns remaining, add them back to the queue.
+            if (person.Turns > 0)
             {
-                person.Turns -= 1;
                 _people.Enqueue(person);
             }
-
-            return person;
         }
+
+        // Return the person who just had their turn.
+        return person;
     }
 
+    /// <summary>
+    /// Provides a string representation of the people in the queue.
+    /// </summary>
     public override string ToString()
     {
-        return _people.ToString();
+        // Use string.Join to create a comma-separated list of names.
+        // This requires the Person class to have a useful ToString() override.
+        return $"[{string.Join(", ", _people.Select(p => p.Name))}]";
     }
 }
